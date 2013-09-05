@@ -23,22 +23,30 @@ http://zeromq.github.io/pyzmq/
 Installation
 ------------
 
-sudo apt-get install python-protobuf protobuf-compiler
-sudo apt-get instsall python-dev build-essential
-pip install tornado
-pip install pyzmq
+Install protobuf:
 
-protoc --python\_out=.
+`sudo apt-get install python-protobuf protobuf-compiler`
+
+Install latests tornado an pyzmq (debian's ones will not suffice)
+
+`sudo apt-get instsall python-dev build-essential`
+`pip install tornado`
+`pip install pyzmq`
+
+Generate exmple\_pb2.py from example.proto
+
+`protoc --python\_out=.`
 
 Running the server
 ------------------
 
-python app.py server
-
+`./app.py server`
 
 Open a browser to: http://localhost:8888
 
 Changing cells with the client
 ------------------------------
 
-python app.py client 3 'new id' 500
+`./app.py client 3 'new id' 500`
+`./app.py client 5 'new id' whatever`
+
