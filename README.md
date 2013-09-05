@@ -30,7 +30,9 @@ Install protobuf:
 Install latests tornado an pyzmq (debian's ones will not suffice)
 
 `sudo apt-get instsall python-dev build-essential`
+
 `pip install tornado`
+
 `pip install pyzmq`
 
 Generate exmple\_pb2.py from example.proto
@@ -48,5 +50,6 @@ Changing cells with the client
 ------------------------------
 
 `./app.py client 3 'new id' 500`
+
 `./app.py client 5 'new id' whatever`
 
