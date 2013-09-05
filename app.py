@@ -40,7 +40,10 @@ def recv_callback_stream(stream, data):
         text_format.MessageToString(m, as_utf8=True, as_one_line=True)
 
     # Do something clever with the message ...
-    m.id += ' :) '
+    m.value = m.value + ' :) '
+
+    print 'modified message: ' + \
+        text_format.MessageToString(m, as_utf8=True, as_one_line=True)
     # Send it through all sockets connected
     for c in cl:
         c.write_message(m.SerializeToString())
@@ -125,4 +128,4 @@ if __name__ == '__main__':
         socket.send_multipart([m.SerializeToString()])
         msg = socket.recv_multipart()
         print 'received back: ' + \
-            text_format.MessageToString(m, as_utf8=True, as_one_line=True)
+            text_format.MessageToString(msg[0], as_utf8=True, as_one_line=True)
