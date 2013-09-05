@@ -1,17 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>tornado WebSocket example</title>
-  <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
-  <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+  <title>tornado WebSocket + protobuf + zmq example</title>
+  <link href="bootstrap-combined.no-icons.min.css" rel="stylesheet">
+  <script type="text/javascript" src="jquery.min.js"></script>
+  <script type="text/javascript" src="Long.min.js"></script>
+  <script type="text/javascript" src="ByteBuffer.min.js"></script>
+  <script type="text/javascript" src="ProtoBuf.min.js"></script>
+  <script>
+   var ProtoBuf = dcodeIO.ProtoBuf;
+   var Message = ProtoBuf.protoFromFile("example.proto").build("Message");
+  </script>
 </head>
 <body>
   <div class="container">
-    <h1>tornado WebSocket example</h1>
+    <h1>tornado WebSocket + protobuf + zmq example</h1>
     <hr>
       WebSocket status : <span id="message"></span>
     <hr>
-    <h3>The following table shows values by using WebSocket</h3>
+    <h3>The following table shows values received through zmq and serialized
+        with protobuf by using WebSocket</h3>
 
       <div class="row">
         <div class="span4">
@@ -65,24 +73,7 @@
       </div>
 
     <hr>
-    <h3>REST API examples</h3>
-    <ol>
-      <li>Set the "id 1" value to 100
-        <ul><li>curl "http://hiroakis.com:8888/api?id=1&amp;value=100"</li></ul>
-      </li>
-      <li>Set the "id 1" value to 300 ( The row No 1 will change to yellow )
-        <ul><li>curl "http://hiroakis.com:8888/api?id=1&amp;value=300"</li></ul>
-      </li>
-      <li>Set The "id 1" value to 600 ( The row No 1 will change to red )
-        <ul><li>curl "http://hiroakis.com:8888/api?id=1&amp;value=600"</li></ul>
-      </li>
-    </ol>
-    <ul>
-      <li>value 201 - 500 : change to yellow</li>
-      <li>value 501 - : change to red</li>
-    </ul>
-    <img src="./rest_api_example.png"/>
-  </div>
+    <h3>Description</h3>
   <script>
     var ws = new WebSocket('ws://localhost:8888/ws');
     var $message = $('#message');
@@ -92,21 +83,22 @@
       $message.text('open');
     };
     ws.onmessage = function(ev){
+
       $message.attr("class", 'label label-info');
       $message.hide();
       $message.fadeIn("slow");
-      $message.text('recieved message');
+      m = Message.decode(ev.data)
+      $message.text('received message');
 
-      var json = JSON.parse(ev.data);
-      $('#' + json.id).hide();
-      $('#' + json.id).fadeIn("slow");
-      $('#' + json.id).text(json.value);
+      $('#' + m.no).hide();
+      $('#' + m.no).fadeIn("slow");
+      $('#' + m.no).text(m.value);
 
-      var $rowid = $('#row' + json.id);
-      if(json.value > 500){
+      var $rowid = $('#row' + m.id);
+      if(m.value > 500){
         $rowid.attr("class", "error");
       }
-      else if(json.value > 200){
+      else if(m.value > 200){
         $rowid.attr("class", "warning");
       }
       else{
