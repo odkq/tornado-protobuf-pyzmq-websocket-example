@@ -37,7 +37,7 @@ Install latests tornado an pyzmq (debian's ones will not suffice)
 
 Generate exmple\_pb2.py from example.proto
 
-`protoc --python\_out=.`
+`protoc --python_out=. example.proto`
 
 Running the server
 ------------------
